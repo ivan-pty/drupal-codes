@@ -1,0 +1,20 @@
+{% if items.name is not empty %}
+<div class="teacher-info-block row">
+    <div class="image col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        {{ items.image }}
+    </div>
+    <div class="teacher-info user-information col-lg-7 col-md-7 col-sm-8 col-xs-12">
+        <div class="user-name">
+            {{ items.name }} {{ items.last_name }}
+        </div>
+        <div class="bio">
+            {{ items.bio }}
+        </div>
+        {% if items.phone is not empty %}
+            <div class="phone">
+              {{ 'Phone:'|t }} <a href="tel:{{ items.phone }}">{{ items.phone }}</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endif %}

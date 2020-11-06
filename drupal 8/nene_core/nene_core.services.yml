@@ -1,0 +1,10 @@
+services:
+  nene_core.my_dashboard_api:
+    class: Drupal\nene_core\Services\NeneApi
+    arguments:
+      - '@path.alias_manager'
+      - '@path.current'
+      - '@entity_type.manager'
+      - '@current_route_match'
+      - '@current_user'
+      - '@database'

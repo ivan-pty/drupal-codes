@@ -1,0 +1,13 @@
+nene_core.ajaxlinks:
+  version: 1.x.1
+  js:
+    assets/js/menuItems.js: { }
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
+    - core/jquery.once
+    - core/jquery.ui.sortable
+    - core/jquery.ui.draggable
+    - core/jquery.ui.dropable
+    - core/jquery.ui.dialog

@@ -1,0 +1,86 @@
+<?php
+
+/**
+ * @file
+ * Provides functionality for nene.
+ */
+
+/**
+* Implements hook_theme().
+*/
+function nene_core_theme() {
+  return [
+    'nene_my_teacher' => [
+      'render element' => 'build',
+      'variables' => [
+        'items' => [],
+      ],
+    ],
+    'nene_parents_menu' => [
+      'render element' => 'build',
+      'variables' => [
+        'items' => [],
+      ],
+    ],
+  ];
+}
+
+
+/**
+ * Helper function to evaluate the topics limit.
+ */
+function node_core_evaluate_topics_limit($vars) {
+  if (is_array($vars['topic']) && count($vars['topic']) > 3) {
+    $topics = array_chunk($vars['topic'],3);
+    foreach ($topics as $key => $topic) {
+      $vars['topic'] = $topics[$key];
+      node_core_fcm($vars);
+    }
+  } else {
+    node_core_fcm($vars);
+  }
+}
+
+/**
+ * Helper function to sent data to Firebase.
+ */
+function node_core_fcm($vars) {
+  if (empty($vars['topic'])) {
+    return ;
+  }
+  $vars['title'] = 'MySiteName';
+  $config = \Drupal::service('config.factory')->getEditable('firebase.settings');
+  if (!empty($config->get('server_key')) && !empty($config->get('sender_id')) && !empty($vars['title'])) {
+    $messageService = \Drupal::service('firebase.message');
+    if (count($vars['topic']) > 1) {
+      $topics = $vars['topic'];
+      $vars['elements'] = [];
+      foreach ($topics as $topic) {
+        $vars['elements'][] = '%s';
+      }
+      $condition = implode(' || ', $vars['elements']);
+      $messageService->createCondition($condition);
+      $messageService->setTopics($vars['topic']);
+    }
+    else {
+      if (is_array($vars['topic'])) {
+        $messageService->setTopics($vars['topic'][0]);
+      }
+      else {
+        $messageService->setTopics($vars['topic']);
+      }
+    }
+    $messageService->setNotification([
+      'title' => $vars['title'],
+      'body' => $vars['body'],
+      'icon' => 'ic_notification',
+    ]);
+    $messageService->setData([
+      'content_type' => $vars['type'],
+    ]);
+    $messageService->send();
+    \Drupal::logger('nene_core')->notice('FCM -> ' . $vars['title']);
+    \Drupal::logger('nene_core')->notice('<pre><code>' . print_r($vars, TRUE) . '</code></pre>' );
+    $messageService->resetService();
+  }
+}

@@ -1,0 +1,10 @@
+nene_core.admin_config_nene:
+  title: 'MySiteName'
+  parent: system.admin_config
+  route_name: nene_core.admin_config_nene
+nene_core.fcm_form:
+  title: 'nene Notification'
+  route_name: nene_core.fcm_form
+  parent: nene_core.admin_config_nene
+  description: 'Form to send Firebase Cloud Messaging(FCM).'
+  weight: 4

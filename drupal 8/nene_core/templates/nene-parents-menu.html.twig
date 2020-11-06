@@ -1,0 +1,13 @@
+{% set class='gsc-button radius-5x small nene-my-dashboard-menu-item' %}
+  {% if items.teacher %}
+    {{ items.teacher }}
+  {% endif %}
+<div class="row nene-parents-menu">
+  <a class="use-ajax {{ class }} {% if items %} active {% endif %} " href="/my-dashboard/appointments" rel="">{{ 'Appointments'|t }}</a>
+  <a class="use-ajax {{ class }}" href="/my-dashboard/payments" rel="">{{ 'Payments'|t }}</a>
+</div>
+{% if items.appointments %}
+  <div class="nene-parents-body">
+    {{ items.appointments }}
+  </div>
+{% endif %}
